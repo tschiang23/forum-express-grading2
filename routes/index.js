@@ -9,10 +9,10 @@ const userController = require('../controllers/user-controller')
 
 // middleware
 const { generalErrorHandler } = require('../middleware/error-handler')
-const { authenticated } = require('../middleware/auth')
+const { authenticated, authenticatedAdmin } = require('../middleware/auth')
 
 // 管理者路由
-router.use('/admin', admin)
+router.use('/admin', authenticatedAdmin, admin)
 
 // 帳號註冊登入路由
 router.get('/signup', userController.signUpPage)
