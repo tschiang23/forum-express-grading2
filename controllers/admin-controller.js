@@ -1,5 +1,6 @@
 const { Restaurant, User, Category } = require('../models')
 const { imgurFileHandler } = require('../helpers/file-helpers')
+const { raw } = require('mysql2')
 
 const adminController = {
   // 取得所有餐廳
@@ -107,6 +108,27 @@ const adminController = {
       })
       .then(() => res.redirect('/admin/restaurants'))
       .catch(err => next(err))
+  },
+  // 使用者管理
+  getUsers: (req, res, next) => {
+    return User.findAll({
+      raw: true
+    })
+      .then(users => {
+        res.render('admin/users', { users })
+      })
+      .catch(err => next(err))
+  },
+  patchUser: (req, res, next) => {
+    return User.findByPk(req.params.id)
+      .then((user) => {
+        const isAdmin = !user.dataValues.isAdmin
+        user.update({ isAdmin })
+        return user.save()
+      })
+      .then(() => res.redirect('/admin/users'))
+      .catch(err => next(err))
   }
+
 }
 module.exports = adminController
