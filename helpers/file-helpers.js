@@ -31,7 +31,7 @@ const imgurFileHandler = file => {
 }
 */
 
-// v2
+// v2.4.2
 const imgurFileHandler = file => {
   if (!file) return null
   // 獲取上傳的圖片
@@ -46,8 +46,6 @@ const imgurFileHandler = file => {
     album: process.env.IMGUR_ALBUM_ID
   })
     .then(response => {
-      // 刪除暫存的圖片檔案
-      fs.unlinkSync(imagePath)
       return (response.data?.link || null)
     })
     .catch(err => console.log(err))
