@@ -1,6 +1,5 @@
 const { Restaurant, User, Category } = require('../models')
 const { imgurFileHandler } = require('../helpers/file-helpers')
-const { raw } = require('mysql2')
 
 const adminController = {
   // 取得所有餐廳
