@@ -33,22 +33,24 @@ const imgurFileHandler = file => {
 
 // v2.4.2
 const imgurFileHandler = file => {
-  if (!file) return null
-  // 獲取上傳的圖片
-  const imagePath = file.path
+  return new Promise((resolve, reject) => {
+    if (!file) return resolve(null)
+    // 獲取上傳的圖片
+    const imagePath = file.path
 
-  // 讀取圖片並轉換為 base64
-  const imageData = fs.readFileSync(imagePath, { encoding: 'base64' })
+    // 讀取圖片並轉換為 base64
+    const imageData = fs.readFileSync(imagePath, { encoding: 'base64' })
 
-  return client.upload({
-    image: imageData,
-    type: 'base64',
-    album: process.env.IMGUR_ALBUM_ID
-  })
-    .then(response => {
-      return (response.data?.link || null)
+    return client.upload({
+      image: imageData,
+      type: 'base64',
+      album: process.env.IMGUR_ALBUM_ID
     })
-    .catch(err => console.log(err))
+      .then(response => {
+        resolve(response.data?.link || null)
+      })
+      .catch(err => reject(err))
+  })
 }
 
 module.exports = {
