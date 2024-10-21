@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs')
 const db = require('../models')
 const { User } = db
+const { imgurFileHandler } = require('../helpers/file-helpers')
+
 const userController = {
   // 註冊
   signUpPage: (req, res) => {
@@ -37,6 +39,22 @@ const userController = {
   logout: (req, res) => {
     req.flash('success_messages', '登出成功！')
     req.logout(() => res.redirect('/signin'))
+  },
+  // user profile
+  getUser: (req, res, next) => {
+    const userId = +req.params.id
+    return User.findByPk(userId, { raw: true })
+      .then(foundUser => {
+        if (!foundUser) throw new Error('使用者不存在')
+        res.render('profile', { foundUser })
+      })
+      .catch(err => next(err))
+  },
+  editUser: (req, res, next) => {
+    res.render('edit-profile')
+  },
+  putUser: (req, res, next) => {
+    res.render('profile')
   }
 }
 
