@@ -46,7 +46,7 @@ const userController = {
     return User.findByPk(userId, { raw: true })
       .then(foundUser => {
         if (!foundUser) throw new Error('使用者不存在')
-        res.render('profile', { foundUser })
+        res.render('users/profile', { foundUser })
       })
       .catch(err => next(err))
   },
@@ -58,7 +58,7 @@ const userController = {
     return User.findByPk(userId, { raw: true })
       .then(foundUser => {
         if (!foundUser) throw new Error('使用者不存在')
-        res.render('edit-profile', { foundUser })
+        res.render('users/edit-profile', { foundUser })
       })
       .catch(err => next(err))
   },
