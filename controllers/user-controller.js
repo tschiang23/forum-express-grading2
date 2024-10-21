@@ -51,10 +51,33 @@ const userController = {
       .catch(err => next(err))
   },
   editUser: (req, res, next) => {
-    res.render('edit-profile')
+    const userId = +req.params.id
+    return User.findByPk(userId, { raw: true })
+      .then(foundUser => {
+        if (!foundUser) throw new Error('使用者不存在')
+        res.render('edit-profile', { foundUser })
+      })
+      .catch(err => next(err))
   },
   putUser: (req, res, next) => {
-    res.render('profile')
+    const { name } = req.body
+    const { file } = req
+
+    if (!name) throw new Error('User name is required!')
+
+    return Promise.all([
+      User.findByPk(req.user.id),
+      imgurFileHandler(file)
+    ])
+      .then(([user, filePath]) => {
+        if (!user) throw new Error("User didn't exist!")
+        return user.update({
+          name,
+          image: filePath || null
+        })
+      })
+      .then(() => res.redirect(`/users/${req.user.id}`))
+      .catch(err => next(err))
   }
 }
 
