@@ -52,6 +52,9 @@ const userController = {
   },
   editUser: (req, res, next) => {
     const userId = +req.params.id
+    // 如果登入的使用者與 userId 不相符
+    if (req.user.id !== userId) return res.redirect(`/users/${req.user.id}`)
+
     return User.findByPk(userId, { raw: true })
       .then(foundUser => {
         if (!foundUser) throw new Error('使用者不存在')
@@ -62,11 +65,13 @@ const userController = {
   putUser: (req, res, next) => {
     const { name } = req.body
     const { file } = req
+    const userId = +req.params.id
 
     if (!name) throw new Error('User name is required!')
+    if (req.user.id !== userId) throw new Error('無法修改他人資料')
 
     return Promise.all([
-      User.findByPk(req.user.id),
+      User.findByPk(userId),
       imgurFileHandler(file)
     ])
       .then(([user, filePath]) => {
@@ -76,7 +81,7 @@ const userController = {
           image: filePath || user.image
         })
       })
-      .then(() => res.redirect(`/users/${req.user.id}`))
+      .then(() => res.redirect(`/users/${userId}`))
       .catch(err => next(err))
   }
 }
