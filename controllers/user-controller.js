@@ -73,7 +73,7 @@ const userController = {
         if (!user) throw new Error("User didn't exist!")
         return user.update({
           name,
-          image: filePath || null
+          image: filePath || user.image
         })
       })
       .then(() => res.redirect(`/users/${req.user.id}`))
