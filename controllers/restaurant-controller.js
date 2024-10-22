@@ -1,6 +1,5 @@
-const { Restaurant, Category, Comment, User, Favorite } = require('../models')
+const { Restaurant, Category, Comment, User } = require('../models')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
-const restaurant = require('../models/restaurant')
 const restaurantController = {
   getRestaurants: (req, res, next) => {
     const DEFAULT_LIMIT = 9
@@ -120,6 +119,7 @@ const restaurantController = {
           .sort((a, b) => b.favoriteCount - a.favoriteCount)
         res.render('top-restaurants', { restaurants: result })
       })
+      .catch(err => next(err))
   }
 }
 module.exports = restaurantController
