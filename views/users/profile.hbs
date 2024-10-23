@@ -16,4 +16,66 @@
       </div>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-4">
+      {{!-- followings --}}
+      <div class="card mb-3">
+        <div class="card-header">
+          {{foundUser.Followings.length}} followings(追蹤者)
+        </div>
+        <div class="card-body">
+          {{#each foundUser.Followings}}
+          <a href="/users/{{this.id}}">
+            <img style="width: 50px; height: 50px" src={{this.image}} />
+          </a>
+          {{/each}}
+        </div>
+      </div>
+
+      {{!-- followers --}}
+      <div class="card">
+        <div class="card-header">
+          {{foundUser.Followers.length}} followers(追隨者)
+        </div>
+        <div class="card-body">
+          {{#each foundUser.Followers}}
+          <a href="/users/{{this.id}}">
+            <img style="width: 50px; height: 50px" src={{this.image}} />
+          </a>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+    {{!-- --}}
+    <div class="col-8">
+      {{!-- 以評論餐廳 --}}
+      <div class="card mb-3">
+        <div class="card-header">
+          {{comments.length}} 以評論餐廳
+        </div>
+        <div class="card-body">
+          {{#each comments}}
+          <a href="/restaurants/{{this.Restaurant.id}}">
+            <img style="width: 50px; height: 50px" src={{this.Restaurant.image}} />
+          </a>
+          {{/each}}
+        </div>
+      </div>
+      {{!-- 收藏的餐廳 --}}
+      <div class="card mb-3">
+        <div class="card-header">
+          {{foundUser.FavoritedRestaurants.length}} 收藏的餐廳
+        </div>
+        <div class="card-body">
+          {{#each foundUser.FavoritedRestaurants}}
+          <a href="/restaurants/{{this.id}}">
+            <img style="width: 50px; height: 50px" src={{this.image}} />
+          </a>
+          {{/each}}
+        </div>
+      </div>
+
+    </div>
+  </div>
 </div>

@@ -42,10 +42,26 @@ const userController = {
   // user profile
   getUser: (req, res, next) => {
     const userId = +req.params.id
-    return User.findByPk(userId, { raw: true })
-      .then(foundUser => {
+    return Promise.all([
+      User.findByPk(userId, {
+        include: [
+          { model: Restaurant, as: 'FavoritedRestaurants', attributes: ['id', 'image'] },
+          { model: User, as: 'Followings' }, // 我在追蹤哪些人
+          { model: User, as: 'Followers' } // 那些人在追蹤我
+        ]
+      }),
+      Comment.findAll({
+        where: { userId },
+        attributes: ['restaurantId'],
+        group: ['restaurantId'],
+        include: [Restaurant],
+        raw: true,
+        nest: true
+      })
+    ])
+      .then(([foundUser, comments]) => {
         if (!foundUser) throw new Error('使用者不存在')
-        res.render('users/profile', { foundUser })
+        res.render('users/profile', { foundUser: foundUser.toJSON(), comments })
       })
       .catch(err => next(err))
   },
